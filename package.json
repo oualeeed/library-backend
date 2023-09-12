@@ -1,0 +1,15 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Oualeeed",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.9.3"
+  }
+}
