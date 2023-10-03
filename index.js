@@ -31,10 +31,6 @@ require('dotenv').config()
 //   },
 // ]
 
-/*
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
-*/
 
 // let books = [
 //   {
@@ -86,115 +82,13 @@ require('dotenv').config()
 //     id: "afa5de04-344d-11e9-a414-719c6709cf3e",
 //     genres: ['classic', 'revolution']
 //   },
-// ]
-
-/*
-  you can remove the placeholder query once your first one has been implemented 
-*/
+// ]//
+ 
 
 console.log('connecting to MongoDB')
 mongoose.connect(process.env.MONGO_DB_URI)
   .then(() => console.log('connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB', error.message))
-
-// const typeDefs = `
-//   type Query {
-//     allBooks(
-//       name: String
-//       genre: String
-//     ): [Book!]!
-//     bookCount: Int!
-//     allAuthors: [Author!]!
-//     authorCount: Int!
-//   }
-
-//   type Mutation {
-//     addBook (
-//       title: String!
-//       author: String!
-//       published: Int!
-//       genres: [String!]!
-//     ): Book
-//     editAuthor (
-//       name: String!
-//       setBornTo: Int!
-//     ): Author
-//   }
-
-//   type Author {
-//     name: String!
-//     id: ID!
-//     born: String
-//     bookCount: Int
-//   }
-
-//   type Book {
-//     title: String!
-//     published: Int!
-//     author: String!
-//     id: ID!
-//     genres: [String]!
-//   }
-// `
-
-// const resolvers = {
-//   Query: {
-//     allBooks: (root, args) => {
-//       let answer = books
-
-//       if (args.name) {
-//         answer = answer.filter(book => book.author === args.name)
-//       }
-
-//       if (args.genre) {
-//         answer = answer.filter(book => book.genres.includes(args.genre))
-//       }
-
-//       return answer
-//     },
-//     bookCount: () => books.length,
-//     allAuthors: () => authors,
-//     authorCount: () => authors.length
-//   },
-//   Mutation: {
-//     addBook: (root, args) => {
-//       const book = { ...args, id: uuid() }
-//       books = books.concat(book)
-
-//       const newAuthor = !authors.map(author => author.name ).includes(book.author)
-//       if ( newAuthor ) {
-//         const author = {
-//           name: book.author,
-//           id: uuid(),
-//         }
-
-//         authors = authors.concat(author)
-//       }
-
-//       return book
-//     },
-//     editAuthor: (root, args) => {
-//       let author = authors.find(author => author.name === args.name)
-//       if (!author) return null
-
-//       author = {...author, born: args.setBornTo}
-//       authors = authors.map(a => a.name === args.name
-//         ? author
-//         : a
-//       )
-
-//       return author
-//     }
-//   },
-//   Author: {
-//     bookCount: (root) => {
-//       return books
-//         .map(book => book.author)
-//         .filter(author => author === root.name)
-//         .reduce((a, c) => a+1,0)
-//     }
-//   }
-// }
 
 const server = new ApolloServer({
   typeDefs,
