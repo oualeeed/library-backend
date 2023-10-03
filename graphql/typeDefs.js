@@ -55,6 +55,6 @@ const typeDefs = `
   type Token {
     value: String!
   }
-` 
+`;
 
-module.exports = typeDefs
+module.exports = typeDefs;

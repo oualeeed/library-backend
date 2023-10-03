@@ -1,9 +1,9 @@
-const { ApolloServer } = require('@apollo/server')
-const { startStandaloneServer } = require('@apollo/server/standalone')
-const resolvers = require('./graphql/resolvers')
-const typeDefs = require('./graphql/typeDefs')
-const { default: mongoose } = require('mongoose')
-require('dotenv').config()
+const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
+const resolvers = require("./graphql/resolvers");
+const typeDefs = require("./graphql/typeDefs");
+const { default: mongoose } = require("mongoose");
+require("dotenv").config();
 
 // let authors = [
 //   {
@@ -21,16 +21,15 @@ require('dotenv').config()
 //     id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
 //     born: 1821
 //   },
-//   { 
+//   {
 //     name: 'Joshua Kerievsky', // birthyear not known
 //     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
 //   },
-//   { 
+//   {
 //     name: 'Sandi Metz', // birthyear not known
 //     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
 //   },
 // ]
-
 
 // let books = [
 //   {
@@ -60,7 +59,7 @@ require('dotenv').config()
 //     author: 'Joshua Kerievsky',
 //     id: "afa5de01-344d-11e9-a414-719c6709cf3e",
 //     genres: ['refactoring', 'patterns']
-//   },  
+//   },
 //   {
 //     title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
 //     published: 2012,
@@ -83,20 +82,20 @@ require('dotenv').config()
 //     genres: ['classic', 'revolution']
 //   },
 // ]//
- 
 
-console.log('connecting to MongoDB')
-mongoose.connect(process.env.MONGO_DB_URI)
-  .then(() => console.log('connected to MongoDB'))
-  .catch((error) => console.log('error connecting to MongoDB', error.message))
+console.log("connecting to MongoDB");
+mongoose
+  .connect(process.env.MONGO_DB_URI)
+  .then(() => console.log("connected to MongoDB"))
+  .catch((error) => console.log("error connecting to MongoDB", error.message));
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
-})
+  resolvers,
+});
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+  console.log(`Server ready at ${url}`);
+});
