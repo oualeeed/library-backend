@@ -20,6 +20,15 @@ const typeDefs = `
       name: String!
       setBornTo: Int!
     ): Author
+    createUser(
+      username: String!
+      favoriteGenre: String!
+      password: String!
+    ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
   
   type Book {
@@ -35,6 +44,16 @@ const typeDefs = `
     id: ID!
     born: String
     bookCount: Int
+  }
+
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
   }
 ` 
 

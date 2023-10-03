@@ -1,5 +1,9 @@
 const Author = require('../model/author')
 const Book = require('../model/book')
+const User = require('../model/user')
+const bcrypt = require('bcrypt')
+const { GraphQLError } = require('graphql')
+const jwt = require('jsonwebtoken')
 
 const resolvers = {
   Query: {
@@ -92,12 +96,64 @@ const resolvers = {
         born: args.setBornTo 
       },
       { new: true },
-    )
+    ),
+    createUser: async (root, args) => {
+      const saltRounds = 10
+      const passwordHash = await bcrypt.hash(args.password, saltRounds)
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+        passwordHash
+      })
+
+      let addedUser
+      try {
+        addedUser = await user.save()
+      } catch (error) {
+        throw new GraphQLError('Create user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            error
+          }
+        })
+      }
+
+      return addedUser
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({
+        username: args.username
+      })
+
+      if (!user) throw new GraphQLError('wrong username', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+          invalidArgs: args.username,
+          error
+        }
+      })
+
+      const correctPassword = await bcrypt.compare(args.password, user.passwordHash)
+      if (!correctPassword) throw new GraphQLError('Login failed', {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+          invalidArgs: args.password,
+          error
+        }
+      }) 
+      
+      const userForToken = {
+        username: user.username,
+        id: user._id.toString(),
+        favoriteGenre: user.favoriteGenre
+      }
+
+      return { value : jwt.sign(userForToken, process.env.JWT_SECRET) }
+    }
   },
   Author: {
     bookCount: async (root, args) => {
       const books = await Book.find({}).populate('author')
-      console.log(books)
       return books
         .map(book => book.author)
         .filter(author => author.name === root.name)
